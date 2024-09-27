@@ -783,9 +783,9 @@ def run_model_initiator(ads_path, efs_split_dir, spec_path, output_path, cpu_cou
         # Create Path if does not exit, also determine weather split is required.
         split = output_path_creator(output_path, input_path, granular_result, granular_stats, granular_support, True, rand_mapping_dict)
         # Splitter
-        # if split:
-            # communicator("SPLIT|", status_path)
-            # ads_file_splitter(ads_path, input_path, spec["config"]["geo_colname"])
+        if split:
+            communicator("SPLIT|", status_path)
+            ads_file_splitter(ads_path, input_path, spec["config"]["geo_colname"])
         # Rapid Refresh
         contri_map = {}
         # if spec['old_model_path']:

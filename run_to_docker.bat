@@ -1,15 +1,16 @@
-
 @REM @echo off
 @REM :: Allow custom image name or default to "my-test"
 @REM set IMAGE_NAME=%1
 @REM if "%IMAGE_NAME%"=="" set IMAGE_NAME=my-test
 
-@REM :: Define the Result folder path
-@REM set RESULT_DIR=C:\Users\Dipankar.Mandal\OneDrive - Ipsos\1.CORE_CODE\PODMAN_TEST\Result
+@REM :: Define input, output, and AWS credentials folder paths
+@REM set INPUT_DIR=C:\Users\Dipankar.Mandal\OneDrive - Ipsos\1.CORE_CODE\PODMAN_TEST\data\INPUT
+@REM set OUTPUT_DIR=C:\Users\Dipankar.Mandal\OneDrive - Ipsos\1.CORE_CODE\PODMAN_TEST\data\OUTPUT
+@REM set AWS_DIR=C:\Users\Dipankar.Mandal\.aws
 
-@REM :: Create the Result directory if it doesn't exist
-@REM if not exist "%RESULT_DIR%" (
-@REM     mkdir "%RESULT_DIR%"
+@REM :: Create the OUTPUT directory if it doesn't exist
+@REM if not exist "%OUTPUT_DIR%" (
+@REM     mkdir "%OUTPUT_DIR%"
 @REM )
 
 @REM :: Build the image
@@ -22,9 +23,9 @@
 @REM     exit /b %errorlevel%
 @REM )
 
-@REM :: Run the container, mounting the Result directory to /app/output
+@REM :: Run the container, mounting INPUT, OUTPUT, and AWS directories
 @REM echo Running the container...
-@REM podman run -it -v "%RESULT_DIR%:/app/output" "%IMAGE_NAME%"
+@REM podman run -it -v "%INPUT_DIR%:/app/input" -v "%OUTPUT_DIR%:/app/output" -v "%AWS_DIR%:/root/.aws:ro" "%IMAGE_NAME%"
 
 @REM :: Check if the container ran successfully
 @REM if %errorlevel% neq 0 (
@@ -41,13 +42,38 @@
 set IMAGE_NAME=%1
 if "%IMAGE_NAME%"=="" set IMAGE_NAME=my-test
 
-:: Define input and output folder paths
+:: Define input, output, and AWS credentials folder paths
 set INPUT_DIR=C:\Users\Dipankar.Mandal\OneDrive - Ipsos\1.CORE_CODE\PODMAN_TEST\data\INPUT
 set OUTPUT_DIR=C:\Users\Dipankar.Mandal\OneDrive - Ipsos\1.CORE_CODE\PODMAN_TEST\data\OUTPUT
+set AWS_DIR=C:\Users\Dipankar.Mandal\.aws
+set REPO_DIR=C:\Users\Dipankar.Mandal\OneDrive - Ipsos\1.CORE_CODE\PODMAN_TEST\code  :: Directory with your source code
+set LAST_BUILD_FILE=%REPO_DIR%\last_build.txt  :: File to track the last build hash
 
 :: Create the OUTPUT directory if it doesn't exist
 if not exist "%OUTPUT_DIR%" (
     mkdir "%OUTPUT_DIR%"
+)
+
+:: Calculate the hash of the source code files and requirements.txt
+for /f "delims=" %%i in ('certutil -hashfile "%REPO_DIR%\requirements.txt" SHA256') do (
+    set REQ_HASH=%%i
+)
+
+set CODE_HASH=
+for /f "delims=" %%i in ('certutil -hashfile "%REPO_DIR%\your_script.py" SHA256') do (
+    set CODE_HASH=%%i
+)
+
+:: Combine the hashes into one string
+set CURRENT_HASH=%REQ_HASH%_%CODE_HASH%
+
+:: Check if the last build file exists and compare hashes
+if exist "%LAST_BUILD_FILE%" (
+    set /p LAST_HASH=<"%LAST_BUILD_FILE%"
+    if "%LAST_HASH%"=="%CURRENT_HASH%" (
+        echo No changes detected. Using existing image: %IMAGE_NAME%
+        goto RUN_CONTAINER
+    )
 )
 
 :: Build the image
@@ -60,9 +86,13 @@ if %errorlevel% neq 0 (
     exit /b %errorlevel%
 )
 
-:: Run the container, mounting both INPUT and OUTPUT directories
+:: Save the current hash to the last build file
+echo %CURRENT_HASH% > "%LAST_BUILD_FILE%"
+
+:RUN_CONTAINER
+:: Run the container, mounting INPUT, OUTPUT, and AWS directories
 echo Running the container...
-podman run -it -v "%INPUT_DIR%:/app/input" -v "%OUTPUT_DIR%:/app/output" "%IMAGE_NAME%"
+podman run -it -v "%INPUT_DIR%:/app/input" -v "%OUTPUT_DIR%:/app/output" -v "%AWS_DIR%:/root/.aws:ro" "%IMAGE_NAME%"
 
 :: Check if the container ran successfully
 if %errorlevel% neq 0 (

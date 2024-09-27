@@ -49,11 +49,12 @@ def get_param():
         # is_split_on_efs = json_body["is_split_on_efs"] if 'is_split_on_efs' in json_body else 0
         is_split_available = json_body["is_split_available"] if 'is_split_available' in json_body else False
     else:    
-        ads_path = r"C:\Users\Samujit.Das\Desktop\S3_test\Core AWS MP\\HP_Rand\v1.csv" if not IS_RUN_ON_BATCH else r"client/ahold/core-as/test_ads_upload/200_data/v3.csv"
-        spec_path = r"C:\Users\Samujit.Das\Desktop\S3_test\Core AWS MP\\HP_Rand\v1.json" if not IS_RUN_ON_BATCH else r"client/ahold/core-as/test_ads_upload/200_data/v3.json"
-        output_path = r"C:\Users\Samujit.Das\Desktop\S3_test\Core AWS MP\\HP_Rand\New" if not IS_RUN_ON_BATCH else r"client/ahold/core-as/test_ads_upload/model_out/v7"
+        ads_path = r"/app/input/YTL_1.csv" if not IS_RUN_ON_BATCH else r"client/ahold/core-as/test_ads_upload/200_data/v3.csv"
+        spec_path = r"/app/input/YTL_1.json" if not IS_RUN_ON_BATCH else r"client/ahold/core-as/test_ads_upload/200_data/v3.json"
+        output_path = r"/app/output" if not IS_RUN_ON_BATCH else r"client/ahold/core-as/test_ads_upload/model_out/v7"
         model_id = "Test_MP_" + str(datetime.datetime.now().strftime('%H:%M:%S'))
         is_split_available = False
+        dynamic_opt_itr = 200
 
 
     param = {        

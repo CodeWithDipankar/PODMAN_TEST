@@ -1,0 +1,15 @@
+,Message,Method
+IRI_California - Multi Outlet,Converged (|f_n-f_(n-1)| ~= 0),TNC SCALE | 0.1 | i = 0.1 | opt_itr = 200
+IRI_Florida - Multi Outlet,Converged (|x_n-x_(n-1)| ~= 0),TNC SCALE | 1 | i = 1 | opt_itr = 200
+IRI_Washington - Multi Outlet,Converged (|f_n-f_(n-1)| ~= 0),TNC SCALE | 0.1 | i = 0.1 | opt_itr = 200
+IRI_Georgia - Multi Outlet,Converged (|f_n-f_(n-1)| ~= 0),TNC SCALE | 0.1 | i = 0.1 | opt_itr = 200
+IRI_Illinois - Multi Outlet,Converged (|f_n-f_(n-1)| ~= 0),TNC SCALE | 0.1 | i = 0.1 | opt_itr = 200
+IRI_Wisconsin - Multi Outlet,Converged (|f_n-f_(n-1)| ~= 0),TNC SCALE | 0.1 | i = 0.1 | opt_itr = 200
+IRI_Louisiana - Multi Outlet,Converged (|f_n-f_(n-1)| ~= 0),TNC SCALE | 0.1 | i = 0.1 | opt_itr = 200
+IRI_Maine - Multi Outlet,Converged (|f_n-f_(n-1)| ~= 0),TNC SCALE | 0.1 | i = 0.1 | opt_itr = 200
+IRI_New Hampshire - Multi Outlet,Local minimum reached (|pg| ~= 0),TNC SCALE | 0.1 | i = 0.1 | opt_itr = 200
+IRI_North Carolina - Multi Outlet,Converged (|f_n-f_(n-1)| ~= 0),TNC SCALE | 0.1 | i = 0.1 | opt_itr = 200
+IRI_South Carolina - Multi Outlet,Converged (|f_n-f_(n-1)| ~= 0),TNC SCALE | 0.1 | i = 0.1 | opt_itr = 200
+IRI_Tennessee - Multi Outlet,Converged (|f_n-f_(n-1)| ~= 0),TNC SCALE | 0.1 | i = 0.1 | opt_itr = 200
+IRI_Texas - Multi Outlet,Converged (|f_n-f_(n-1)| ~= 0),TNC SCALE | 0.1 | i = 0.1 | opt_itr = 200
+IRI_Virginia - Multi Outlet,Converged (|f_n-f_(n-1)| ~= 0),TNC SCALE | 0.1 | i = 0.1 | opt_itr = 200

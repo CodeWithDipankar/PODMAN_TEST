@@ -1,11 +1,46 @@
+@REM @echo off
+@REM :: Allow custom image name or default to "my-test"
+@REM set IMAGE_NAME=%1
+@REM if "%IMAGE_NAME%"=="" set IMAGE_NAME=my-test
+
+@REM :: Define input, output, and AWS credentials folder paths
+@REM set INPUT_DIR=C:\Users\Dipankar.Mandal\OneDrive - Ipsos\1.CORE_CODE\PODMAN_TEST\data\INPUT
+@REM set OUTPUT_DIR=C:\Users\Dipankar.Mandal\OneDrive - Ipsos\1.CORE_CODE\PODMAN_TEST\data\OUTPUT
+@REM set AWS_DIR=C:\Users\Dipankar.Mandal\.aws
+
+@REM :: Create the OUTPUT directory if it doesn't exist
+@REM if not exist "%OUTPUT_DIR%" (
+@REM     mkdir "%OUTPUT_DIR%"
+@REM )
+
+@REM :: Build the image
+@REM echo Building the container image...
+@REM podman build -t %IMAGE_NAME% .
+
+@REM :: Check if the build was successful
+@REM if %errorlevel% neq 0 (
+@REM     echo Failed to build the image. Exiting.
+@REM     exit /b %errorlevel%
+@REM )
+
+@REM :: Run the container, mounting INPUT, OUTPUT, and AWS directories
+@REM echo Running the container...
+@REM podman run -it -v "%INPUT_DIR%:/app/input" -v "%OUTPUT_DIR%:/app/output" -v "%AWS_DIR%:/root/.aws:ro" "%IMAGE_NAME%"
+
+@REM :: Check if the container ran successfully
+@REM if %errorlevel% neq 0 (
+@REM     echo Failed to run the container. Exiting.
+@REM     exit /b %errorlevel%
+@REM )
+
+@REM echo Container ran successfully.
+@REM pause
+
+
 @echo off
 :: Allow custom image name or default to "my-test"
 set IMAGE_NAME=%1
-if "%IMAGE_NAME%"=="" set IMAGE_NAME=model_engine
-
-:: Allow custom container name or default to "my-container"
-set CONTAINER_NAME=%2
-if "%CONTAINER_NAME%"=="" set CONTAINER_NAME=model_engine
+if "%IMAGE_NAME%"=="" set IMAGE_NAME=my-test
 
 :: Define input, output, and AWS credentials folder paths
 set INPUT_DIR=C:\Users\Dipankar.Mandal\OneDrive - Ipsos\1.CORE_CODE\PODMAN_TEST\data\INPUT
@@ -55,13 +90,9 @@ if %errorlevel% neq 0 (
 echo %CURRENT_HASH% > "%LAST_BUILD_FILE%"
 
 :RUN_CONTAINER
-:: Stop and remove the existing container if it's running
-podman stop %CONTAINER_NAME% 2>nul
-podman rm %CONTAINER_NAME% 2>nul
-
-:: Run the container, mounting INPUT, OUTPUT, and AWS directories with custom container name
+:: Run the container, mounting INPUT, OUTPUT, and AWS directories
 echo Running the container...
-podman run -it --name %CONTAINER_NAME% -v "%INPUT_DIR%:/app/input" -v "%OUTPUT_DIR%:/app/output" -v "%AWS_DIR%:/root/.aws:ro" "%IMAGE_NAME%"
+podman run -it -v "%INPUT_DIR%:/app/input" -v "%OUTPUT_DIR%:/app/output" -v "%AWS_DIR%:/root/.aws:ro" "%IMAGE_NAME%"
 
 :: Check if the container ran successfully
 if %errorlevel% neq 0 (
@@ -70,3 +101,4 @@ if %errorlevel% neq 0 (
 )
 
 echo Container ran successfully.
+pause

@@ -54,7 +54,7 @@ if %errorlevel% neq 0 (
 :: Save the current hash to the last build file
 echo %CURRENT_HASH% > "%LAST_BUILD_FILE%"
 
-:RUN_CONTAINER
+::RUN_CONTAINER
 :: Stop and remove the existing container if it's running
 podman stop %CONTAINER_NAME% 2>nul
 podman rm %CONTAINER_NAME% 2>nul
